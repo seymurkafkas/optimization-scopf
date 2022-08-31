@@ -91,8 +91,3 @@ def calculate_lodf(
                     1 - (line_ptdf_matrix[j][j])
                 )
     return lodf_matrix
-
-
-if __name__ == "__main__":
-    lodf_matrix = calculate_lodf("IEEE14.line", "IEEE14.bus")
-    generate_model_data(lodf_matrix, "out.lodf")
