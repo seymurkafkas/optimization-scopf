@@ -72,43 +72,43 @@ for{(l,k,m,a,b,c) in CONTINGENCIES cross LINES} {
 
 # Loggers and Printing Utilities. Adapted from https://vanderbei.princeton.edu/ampl/nlmodels/power/#
 printf "Objective (Cost)  %8.2f\n", sum {bus in BUSES : bus_type[bus] == 2 || bus_type[bus] == 3} 
-   (generator_cost_square_component[bus]*p_g[bus]^2 + generator_cost_linear_component[bus]*p_g[bus] + generator_cost_constant_component[bus]) > scopf_result.txt;
-printf "Total Losses  %8.2f MW\n", losses*100 >> scopf_result.txt;
-printf "Active Generation %8.2f MW\n", sum {k in BUSES} p_g[k]*100 >> scopf_result.txt;
-printf "  #      Name    Voltage  Angle     PGen    PLoad  #Line  To    PFlux     Pmax\n" >> scopf_result.txt;
-printf "-----------------------------------------------------------------------\n" >> scopf_result.txt; 
+   (generator_cost_square_component[bus]*p_g[bus]^2 + generator_cost_linear_component[bus]*p_g[bus] + generator_cost_constant_component[bus]);
+printf "Total Losses  %8.2f MW\n", losses*100;
+printf "Active Generation %8.2f MW\n", sum {k in BUSES} p_g[k]*100;
+printf "  #      Name    Voltage  Angle     PGen    PLoad  #Line  To    PFlux     Pmax\n";
+printf "-----------------------------------------------------------------------\n"; 
 
 for{i in BUSES} {
    printf "%4d %s %6.4f %6.2f %8.2f %8.2f", i, bus_name[i], bus_voltage[i], bus_angle[i]*180/3.14159,
-   p_g[i]*100, bus_p_load[i]*100 >> scopf_result.txt;
+   p_g[i]*100, bus_p_load[i]*100;
 
-   printf " ------------\n" >> scopf_result.txt;
+   printf " ------------\n";
 
    for{(l,i,m) in LINES} 
-   printf "%48s %4d %4d %8.2f %8.2f \n", "", l, m, p_d[l,i,m]*100, 100*p_max[l,i,m] >> scopf_result.txt;
+   printf "%48s %4d %4d %8.2f %8.2f \n", "", l, m, p_d[l,i,m]*100, 100*p_max[l,i,m];
 
    for{(l,k,i) in LINES} 
-   printf "%48s %4d %4d %8.2f %8.2f\n", "", l, k, p_r[l,k,i]*100, 100*p_max[l,k,i] >> scopf_result.txt;
+   printf "%48s %4d %4d %8.2f %8.2f\n", "", l, k, p_r[l,k,i]*100, 100*p_max[l,k,i];
 }
 
 # Generates contingency logs
 for {(a,b,c) in CONTINGENCIES} {
-   printf "CONTINGENCY OF BRANCH %d \n", a > contingency_result.txt;
-   printf "Active Generation %8.2f MW\n", sum {k in BUSES} p_g[k]*100 >> contingency_result.txt;
-   printf "  #      Name    Voltage  Angle     PGen    PLoad  #Line  To    PFlux     Pmax\n" >> contingency_result.txt;
-   printf "-----------------------------------------------------------------------\n" >> contingency_result.txt; 
+   printf "CONTINGENCY OF BRANCH %d \n", a ;
+   printf "Active Generation %8.2f MW\n", sum {k in BUSES} p_g[k]*100;
+   printf "  #      Name    Voltage  Angle     PGen    PLoad  #Line  To    PFlux     Pmax\n";
+   printf "-----------------------------------------------------------------------\n"; 
 
    for{i in BUSES} {
       printf "%4d %s %6.4f %6.2f %8.2f %8.2f", i, bus_name[i], bus_voltage[i], bus_angle[i]*180/3.14159,
-      p_g[i]*100, bus_p_load[i]*100 >> contingency_result.txt;
+      p_g[i]*100, bus_p_load[i]*100;
 
-      printf " ------------\n" >> contingency_result.txt;
+      printf " ------------\n";
 
       for{(l,i,m) in LINES} 
-      printf "%48s %4d %4d %8.2f %8.2f \n", "", l,m, p_d_contingency[a,b,c,l,i,m]*100, 100*p_max[l,i,m] >> contingency_result.txt;
+      printf "%48s %4d %4d %8.2f %8.2f \n", "", l,m, p_d_contingency[a,b,c,l,i,m]*100, 100*p_max[l,i,m];
 
       for{(l,k,i) in LINES} 
-      printf "%48s %4d %4d %8.2f %8.2f\n", "", l,k, p_r_contingency[a,b,c,l,k,i]*100, 100*p_max[l,k,i] >> contingency_result.txt;
+      printf "%48s %4d %4d %8.2f %8.2f\n", "", l,k, p_r_contingency[a,b,c,l,k,i]*100, 100*p_max[l,k,i];
    }
 }
   ''')
